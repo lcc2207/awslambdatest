@@ -2,11 +2,9 @@ version: 0.2
 phases:
   install:
     commands:
-      - npm install time
-      - export BUCKET=lambda-deployment-artifacts-123456789012
-      - aws cloudformation package --template-file template.yaml --s3-bucket $BUCKET --output-template-file outputtemplate.yaml
-artifacts:
-  type: zip
-  files:
-    - template.yaml
-    - outputtemplate.yaml
+      - apt update; apt install zip -y
+      - pip install awscli
+  build:
+    commands:
+      - zip index.zip index.js
+      - aws lambda update-function-code --function-name testlambda --zip-file fileb://index.zip
